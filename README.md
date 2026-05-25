@@ -83,14 +83,6 @@ Além disso, demonstra minha capacidade de:
 
 ---
 
-## 👨‍💻 Autor
-
-### Geneton Neto
-
-🎓 Estudante de Análise e Desenvolvimento de Sistemas — IFPE  
-💼 Analista de Sistemas  
-🚀 Focado em automação, desenvolvimento e soluções corporativas
-
 ## ⭐ Contribuição
 
 Sinta-se à vontade para abrir issues, sugerir melhorias ou contribuir com o projeto.

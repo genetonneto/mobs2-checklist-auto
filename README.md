@@ -91,16 +91,6 @@ Além disso, demonstra minha capacidade de:
 💼 Analista de Sistemas  
 🚀 Focado em automação, desenvolvimento e soluções corporativas
 
----
-
-## 📬 Contato
-
-- LinkedIn: SEU_LINKEDIN
-- GitHub: SEU_GITHUB
-- Email: SEU_EMAIL
-
----
-
 ## ⭐ Contribuição
 
 Sinta-se à vontade para abrir issues, sugerir melhorias ou contribuir com o projeto.

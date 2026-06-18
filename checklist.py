@@ -20,7 +20,7 @@ with sync_playwright() as pw:
         contexto.add_init_script("""
             Object.defineProperty(navigator, 'webdriver', {
                 get: () => undefined
-            });
+            }); 
         """)
         page = contexto.new_page()
         page.goto("https://system.mobs2.com/")
@@ -186,7 +186,7 @@ with sync_playwright() as pw:
     page.wait_for_timeout(9000)
 
 # BR7 
-    campo = page.get_by_role("combobox").first
+    campo = page.get_by_role("combobox").first 
     campo.wait_for()
     campo.click()
     campo.type("BR7", delay=100)

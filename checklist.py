@@ -20,7 +20,7 @@ with sync_playwright() as pw:
         contexto.add_init_script("""
             Object.defineProperty(navigator, 'webdriver', {
                 get: () => undefined
-            });
+            }); 
         """)
         page = contexto.new_page()
         page.goto("https://system.mobs2.com/")

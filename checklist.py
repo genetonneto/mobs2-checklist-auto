@@ -186,7 +186,7 @@ with sync_playwright() as pw:
     page.wait_for_timeout(9000)
 
 # BR7 
-    campo = page.get_by_role("combobox").first
+    campo = page.get_by_role("combobox").first 
     campo.wait_for()
     campo.click()
     campo.type("BR7", delay=100)

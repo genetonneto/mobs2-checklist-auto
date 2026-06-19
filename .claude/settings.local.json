@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(& \"C:\\\\Program Files\\\\Tesseract-OCR\\\\tesseract.exe\" --list-langs 2>&1)",
+      "PowerShell($dest = \"$env:TEMP\\\\por.traineddata\"; Invoke-WebRequest -Uri \"https://github.com/tesseract-ocr/tessdata/raw/main/por.traineddata\" -OutFile $dest; Copy-Item $dest \"C:\\\\Program Files\\\\Tesseract-OCR\\\\tessdata\\\\por.traineddata\" -Force)",
+      "PowerShell($dest = \"C:\\\\Users\\\\Geneton\\\\Documents\\\\mobs2-checklist-auto\\\\tessdata\\\\por.traineddata\"; New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Geneton\\\\Documents\\\\mobs2-checklist-auto\\\\tessdata\" | Out-Null; Invoke-WebRequest -Uri \"https://github.com/tesseract-ocr/tessdata/raw/main/por.traineddata\" -OutFile $dest; Write-Host \"OK: $dest\")",
+      "PowerShell(Copy-Item \"C:\\\\Program Files\\\\Tesseract-OCR\\\\tessdata\\\\eng.traineddata\" \"C:\\\\Users\\\\Geneton\\\\Documents\\\\mobs2-checklist-auto\\\\tessdata\\\\eng.traineddata\" -Force)",
+      "PowerShell($env:TESSDATA_PREFIX = \"C:\\\\Users\\\\Geneton\\\\Documents\\\\mobs2-checklist-auto\\\\tessdata\"; & \"C:\\\\Program Files\\\\Tesseract-OCR\\\\tesseract.exe\" --list-langs 2>&1)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\Geneton\\\\Documents\\\\mobs2-checklist-auto\" -Recurse -Force | Where-Object { -not $_.PSIsContainer } | Select-Object FullName)",
+      "PowerShell(ls -la \"c:\\\\Users\\\\Geneton\\\\Documents\\\\mobs2-checklist-auto\" -Force | Where-Object { $_.Name -notmatch '^\\\\.' })",
+      "PowerShell(Get-Content \"c:\\\\Users\\\\Geneton\\\\Documents\\\\mobs2-checklist-auto\\\\checklist.py\" | Select-Object -First 50 | ForEach-Object { $_ })"
+    ],
+    "additionalDirectories": [
+      "C:\\Program Files\\Tesseract-OCR\\tessdata"
+    ]
+  }
+}

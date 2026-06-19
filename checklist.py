@@ -74,23 +74,23 @@ class Cliente:
 # Para inibir um cliente, basta comentar a linha correspondente
 CLIENTES = [
     Cliente("ASA BRANCA"),
-    # Cliente("BR7"),
-    # Cliente("ITAMARACA",         "ITA"),
-    # Cliente("RAYMUNDO DA FONTE", "RAYMUNDO"),
-    # Cliente("ATALAIA"),
-    # Cliente("MB LIMPEZA"),
-    # Cliente("BORBOREMA",         "BORBO"),
-    # Cliente("M DIAS BRANCO",     "M DIAS"),
-    # Cliente("GRUPO SANTA ZITA"),
-    # Cliente("DELLYS"),
-    # Cliente("SAMBAIBA",          "SAMBAIBA TRANSPORTES"),
-    # Cliente("MONTE ALEGRE",      "AGENCIA DE TURISMO MONTE ALEGRE"),
-    # Cliente("VALINHOS",          "RAPIDO LUXO - VALINHOS"),
-    # Cliente("RAPIDO LUXO CAMPINAS"),
-    # Cliente("RS - PAULINIA",     "RAPIDO SUMARE LTDA - PAULINIA"),
-    # Cliente("RS - PIRACICABA",   "RAPIDO SUMARE LTDA - PIRACICABA"),
-    # Cliente("VB TRANSPORTE"),
-    # Cliente("CAMPO LIMPO"),
+    Cliente("BR7"),
+    Cliente("ITAMARACA",         "ITA"),
+    Cliente("RAYMUNDO DA FONTE", "RAYMUNDO"),
+    Cliente("ATALAIA"),
+    Cliente("MB LIMPEZA"),
+    Cliente("BORBOREMA",         "BORBO"),
+    Cliente("M DIAS BRANCO",     "M DIAS"),
+    Cliente("GRUPO SANTA ZITA"),
+    Cliente("DELLYS"),
+    Cliente("SAMBAIBA",          "SAMBAIBA TRANSPORTES"),
+    Cliente("MONTE ALEGRE",      "AGENCIA DE TURISMO MONTE ALEGRE"),
+    Cliente("VALINHOS",          "RAPIDO LUXO - VALINHOS"),
+    Cliente("RAPIDO LUXO CAMPINAS"),
+    Cliente("RS - PAULINIA",     "RAPIDO SUMARE LTDA - PAULINIA"),
+    Cliente("RS - PIRACICABA",   "RAPIDO SUMARE LTDA - PIRACICABA"),
+    Cliente("VB TRANSPORTE"),
+    Cliente("CAMPO LIMPO"),
 ]
 
 
@@ -118,35 +118,36 @@ def verificar_telemetria(page: Page) -> tuple:
                 pass
 
     page.on("response", on_response)
+    try:
+        page.get_by_text("Cockpit").wait_for(state="visible")
+        page.get_by_text("Cockpit").click()
+        page.get_by_role("link", name=" Telemetria ").click()
 
-    page.get_by_text("Cockpit").wait_for(state="visible")
-    page.get_by_text("Cockpit").click()
-    page.get_by_role("link", name=" Telemetria ").click()
+        page.evaluate("document.documentElement.style.zoom = '67%'")
+        page.wait_for_timeout(9999)
+        page.get_by_label("*").click()
 
-    page.evaluate("document.documentElement.style.zoom = '67%'")
-    page.wait_for_timeout(9999)
-    page.get_by_label("*").click()
+        for _ in range(4):
+            page.keyboard.press("ArrowDown")
+        page.keyboard.press("Enter")
+        page.keyboard.press("Escape")
 
-    for _ in range(4):
-        page.keyboard.press("ArrowDown")
-    page.keyboard.press("Enter")
-    page.keyboard.press("Escape")
+        gridcell_disponivel = page.get_by_role("gridcell", name=re.compile(r"dispon[ií]vel", re.IGNORECASE)).first
+        gridcell_disponivel.click()
+        gridcell_disponivel.click()
 
-    gridcell_disponivel = page.get_by_role("gridcell", name=re.compile(r"dispon[ií]vel", re.IGNORECASE)).first
-    gridcell_disponivel.click()
-    gridcell_disponivel.click()
+        page.get_by_role("link", name="Colunas").click()
+        page.get_by_role("link", name="Chip Número").click()
+        page.mouse.click(page.viewport_size["width"] / 2, page.viewport_size["height"] / 2)
 
-    page.get_by_role("link", name="Colunas").click()
-    page.get_by_role("link", name="Chip Número").click()
-    page.mouse.click(page.viewport_size["width"] / 2, page.viewport_size["height"] / 2)
+        page.wait_for_timeout(1000)
+        for _ in range(200):
+            page.mouse.wheel(0, 100)
+            page.wait_for_timeout(150)
 
-    page.wait_for_timeout(1000)
-    for _ in range(200):
-        page.mouse.wheel(0, 100)
-        page.wait_for_timeout(150)
-
-    page.wait_for_timeout(2000)
-    page.remove_listener("response", on_response)
+        page.wait_for_timeout(2000)
+    finally:
+        page.remove_listener("response", on_response)
 
     return processar_capturas_rede(capturas)
 
@@ -287,41 +288,41 @@ def gerar_relatorio_excel(resultados: dict) -> None:
         print(f"{'='*60}\n")
 
 
-# def verificar_localizacao(page: Page) -> None:
-#     page.get_by_text("Operação Telemetria").click()
-#     page.get_by_role("link", name=" Localização ").click()
-#     page.evaluate("document.documentElement.style.zoom = '67%'")
-#     page.wait_for_timeout(5000)
+def verificar_localizacao(page: Page) -> None:
+    page.get_by_text("Operação Telemetria").click()
+    page.get_by_role("link", name=" Localização ").click()
+    page.evaluate("document.documentElement.style.zoom = '67%'")
+    page.wait_for_timeout(5000)
 
-#     page.get_by_role("link", name="Todos ").first.click()
-#     page.wait_for_timeout(5000)
-#     page.get_by_role("link", name="Todos ").nth(1).click()
-#     page.wait_for_timeout(5000)
-#     page.get_by_role("link", name="Todos ").nth(2).click()
-#     page.wait_for_timeout(5000)
+    page.get_by_role("link", name="Todos ").first.click()
+    page.wait_for_timeout(5000)
+    page.get_by_role("link", name="Todos ").nth(1).click()
+    page.wait_for_timeout(5000)
+    page.get_by_role("link", name="Todos ").nth(2).click()
+    page.wait_for_timeout(5000)
 
-#     page.get_by_role("link", name="Selecionar").click()
-#     page.wait_for_timeout(500)
+    page.get_by_role("link", name="Selecionar").click()
+    page.wait_for_timeout(500)
 
 
-# def verificar_relatorios(page: Page) -> None:
-#     page.get_by_text("Operação Telemetria").click()
-#     page.get_by_role("link", name=" Relatórios ").click()
-#     page.evaluate("document.documentElement.style.zoom = '67%'")
-#     page.wait_for_timeout(5000)
+def verificar_relatorios(page: Page) -> None:
+    page.get_by_text("Operação Telemetria").click()
+    page.get_by_role("link", name=" Relatórios ").click()
+    page.evaluate("document.documentElement.style.zoom = '67%'")
+    page.wait_for_timeout(5000)
 
-#     page.get_by_role("link", name=" Mobs2 - Dashboard Icon Dashboard Geral").click()
-#     page.evaluate("document.documentElement.style.zoom = '67%'")
-#     page.wait_for_timeout(9000)
+    page.get_by_role("link", name=" Mobs2 - Dashboard Icon Dashboard Geral").click()
+    page.evaluate("document.documentElement.style.zoom = '67%'")
+    page.wait_for_timeout(9000)
 
-#     page.get_by_text("Operação Telemetria").click()
-#     page.get_by_role("link", name=" Relatórios ").click()
-#     page.evaluate("document.documentElement.style.zoom = '67%'")
-#     page.wait_for_timeout(5000)
+    page.get_by_text("Operação Telemetria").click()
+    page.get_by_role("link", name=" Relatórios ").click()
+    page.evaluate("document.documentElement.style.zoom = '67%'")
+    page.wait_for_timeout(5000)
 
-#     page.get_by_role("link", name=" Mobs2 - Dashboard Icon Dashboard de Mapeamento de Eventos").click()
-#     page.evaluate("document.documentElement.style.zoom = '67%'")
-#     page.wait_for_timeout(9000)
+    page.get_by_role("link", name=" Mobs2 - Dashboard Icon Dashboard de Mapeamento de Eventos").click()
+    page.evaluate("document.documentElement.style.zoom = '67%'")
+    page.wait_for_timeout(9000)
 
 
 
@@ -334,9 +335,17 @@ def processar_cliente(page: Page, cliente: Cliente) -> tuple:
     selecionar_cliente(page, cliente.busca)
     cabecalhos, linhas = verificar_telemetria(page)
     atrasados = filtrar_veiculos_atrasados(cabecalhos, linhas)
+    verificar_localizacao(page)
+    verificar_relatorios(page)
     return cabecalhos, atrasados
-    # verificar_localizacao(page)
-    # verificar_relatorios(page)
+
+
+def _resetar_pagina(page: Page) -> None:
+    try:
+        page.goto(URL_BASE, timeout=30_000)
+        page.wait_for_load_state("networkidle", timeout=30_000)
+    except Exception:
+        pass
 
 
 def main():
@@ -350,7 +359,18 @@ def main():
 
         resultados = {}
         for cliente in CLIENTES:
-            resultados[cliente.nome] = processar_cliente(page, cliente)
+            for tentativa in range(1, 3):
+                try:
+                    resultados[cliente.nome] = processar_cliente(page, cliente)
+                    break
+                except Exception as erro:
+                    print(f"[erro] {cliente.nome} — tentativa {tentativa}/2: {erro}")
+                    if tentativa == 1:
+                        print(f"[retry] reiniciando página e tentando novamente...")
+                        _resetar_pagina(page)
+                    else:
+                        print(f"[skip] {cliente.nome} ignorado após 2 falhas.")
+                        resultados[cliente.nome] = ([], [])
 
         gerar_relatorio_excel(resultados)
         page.pause()

@@ -46,8 +46,8 @@ def iniciar_sessao(navegador):
         page = contexto.new_page()
         page.goto(URL_BASE)
 
-        page.get_by_role("textbox", name="Email").fill("geneton.neto@mobs2.com")
-        page.get_by_role("textbox", name="Senha Senha Atual Nova Senha").fill("N3tto34382201!")
+        page.get_by_role("textbox", name="Email").fill("SEU_EMAIL")
+        page.get_by_role("textbox", name="Senha Senha Atual Nova Senha").fill("SUA_SENHA")
         page.get_by_role("button", name="Entrar").click()
         page.wait_for_load_state("networkidle")
         contexto.storage_state(path=SESSION_FILE)
@@ -215,8 +215,44 @@ def _normalizar(texto: str) -> str:
 
 def gerar_relatorio_excel(resultados: dict) -> None:
     wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Veículos Atrasados"
+
+    # --- Aba de resumo (tabela principal) ---
+    ws_resumo = wb.active
+    ws_resumo.title = "Resumo"
+
+    fill_alerta = PatternFill(fill_type="solid", fgColor="FF4444")
+    fill_ok     = PatternFill(fill_type="solid", fgColor="4CAF50")
+    fill_header = PatternFill(fill_type="solid", fgColor="1E3A5F")
+    fonte_header = Font(bold=True, color="FFFFFF")
+    fonte_alerta = Font(bold=True, color="FFFFFF")
+    fonte_ok     = Font(bold=True, color="FFFFFF")
+
+    ws_resumo.append(["Empresa", "Alerta", "Total Atrasados"])
+    for cell in ws_resumo[1]:
+        cell.fill = fill_header
+        cell.font = fonte_header
+
+    for empresa, (_cab, atrasados) in sorted(resultados.items()):
+        total_empresa = len(atrasados)
+        if total_empresa > 0:
+            alerta_texto = "⚠ ALERTA"
+            fill_row = fill_alerta
+            fonte_row = fonte_alerta
+        else:
+            alerta_texto = "✔ OK"
+            fill_row = fill_ok
+            fonte_row = fonte_ok
+        ws_resumo.append([empresa, alerta_texto, total_empresa])
+        for cell in ws_resumo[ws_resumo.max_row]:
+            cell.fill = fill_row
+            cell.font = fonte_row
+
+    for col in ws_resumo.columns:
+        max_len = max(len(str(cell.value or "")) for cell in col)
+        ws_resumo.column_dimensions[col[0].column_letter].width = max_len + 4
+
+    # --- Aba de detalhes ---
+    ws = wb.create_sheet("Veículos Atrasados")
 
     cabecalhos_globais = next(
         (cab for cab, _ in resultados.values() if cab), []
@@ -227,9 +263,9 @@ def gerar_relatorio_excel(resultados: dict) -> None:
     nomes_saida = [cabecalhos_globais[i] for i in indices]
 
     ws.append(["Empresa"] + nomes_saida + ["Atraso (h)"])
-
-    fill_alerta = PatternFill(fill_type="solid", fgColor="FF4444")
-    fonte_alerta = Font(bold=True, color="FFFFFF")
+    for cell in ws[1]:
+        cell.fill = fill_header
+        cell.font = fonte_header
 
     for empresa, (_cab, atrasados) in sorted(resultados.items()):
         for linha, horas in atrasados:

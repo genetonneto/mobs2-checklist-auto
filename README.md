@@ -28,6 +28,95 @@ Com a automação em Python, o tempo de execução foi reduzido para cerca de **
 
 ---
 
+## 🛠️ Pré-requisitos e Instalação
+
+### Requisitos
+
+- [Python 3.10+](https://www.python.org/downloads/)
+- pip (incluído na instalação do Python)
+- Conexão com a internet
+
+### Dependências
+
+| Biblioteca | Versão mínima | Uso |
+|---|---|---|
+| `playwright` | 1.40+ | Automação do navegador Chromium |
+| `openpyxl` | 3.1+ | Geração do relatório Excel |
+
+As dependências estão declaradas no arquivo `requirements.txt` na raiz do projeto.
+
+### Passo a passo
+
+**1. Clone o repositório**
+```bash
+git clone https://github.com/seu-usuario/mobs2-checklist-auto.git
+cd mobs2-checklist-auto
+```
+
+**2. (Opcional) Crie e ative um ambiente virtual**
+```bash
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux / macOS
+source venv/bin/activate
+```
+
+**3. Instale as dependências Python**
+```bash
+pip install -r requirements.txt
+```
+
+**4. Instale o navegador Chromium do Playwright**
+```bash
+playwright install chromium
+```
+
+**5. Configure suas credenciais de acesso**
+
+Abra o arquivo `checklist.py` e localize a função `iniciar_sessao`. Substitua os placeholders com seu e-mail e senha do sistema:
+
+```python
+page.get_by_role("textbox", name="Email").fill("SEU_EMAIL")
+page.get_by_role("textbox", name="Senha Senha Atual Nova Senha").fill("SUA_SENHA")
+```
+
+> **Atenção:** as credenciais precisam ser configuradas apenas uma vez. Após o primeiro login bem-sucedido, o arquivo `session.json` é gerado e reutilizado nas execuções seguintes.
+
+**6. Execute o checklist**
+```bash
+python checklist.py
+```
+
+---
+
+## ▶️ O que acontece durante a execução
+
+1. **Uma janela do Chrome abre** — o script roda em modo visual (`headless=False`) para simular interações humanas e evitar bloqueios anti-bot.
+2. **O script percorre cada cliente** — para cada um, verifica a telemetria, localização e dashboards no sistema M2.
+3. **Logs são exibidos no terminal** — incluindo capturas de rede, veículos com atraso detectados e eventuais erros por cliente.
+4. **Ao final, o Playwright Inspector é aberto** — a execução pausa automaticamente para inspeção. Feche a janela do Inspector ou clique em "Resume" para encerrar.
+5. **O relatório é gerado** — o arquivo `Relatorio_Checklist.xlsx` é criado (ou sobrescrito) na pasta raiz do projeto com o resumo de todos os clientes e veículos com atraso acima de 1h30m.
+
+---
+
+## 📄 Arquivo de sessão (`session.json`)
+
+Na primeira execução, após o login, o arquivo `session.json` é criado com os cookies de autenticação. Nas execuções seguintes, o login é pulado e esse arquivo é reutilizado.
+
+**Quando deletar o `session.json`:**
+- A sessão expirou e o script está redirecionando para a tela de login.
+- Você trocou as credenciais no `checklist.py`.
+- O sistema apresentou comportamento inesperado logo após a inicialização.
+
+Basta apagar o arquivo e rodar o script novamente — um novo `session.json` será criado.
+
+> **Importante:** o `session.json` contém cookies de autenticação sensíveis e já está listado no `.gitignore`. Nunca o commite no repositório.
+
+---
+
 ## 🧠 Tecnologias Utilizadas
 
 - 🐍 Python

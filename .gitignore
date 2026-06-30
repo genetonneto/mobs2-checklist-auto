@@ -1,0 +1,17 @@
+# Sessão de autenticação (contém cookies sensíveis)
+session.json
+
+# Relatório gerado pelo script
+Relatorio_Checklist.xlsx
+
+# Ambiente virtual
+venv/
+.venv/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+
+# VS Code
+.vscode/

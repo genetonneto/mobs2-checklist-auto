@@ -102,21 +102,6 @@ python checklist.py
 
 ---
 
-## 📄 Arquivo de sessão (`session.json`)
-
-Na primeira execução, após o login, o arquivo `session.json` é criado com os cookies de autenticação. Nas execuções seguintes, o login é pulado e esse arquivo é reutilizado.
-
-**Quando deletar o `session.json`:**
-- A sessão expirou e o script está redirecionando para a tela de login.
-- Você trocou as credenciais no `checklist.py`.
-- O sistema apresentou comportamento inesperado logo após a inicialização.
-
-Basta apagar o arquivo e rodar o script novamente — um novo `session.json` será criado.
-
-> **Importante:** o `session.json` contém cookies de autenticação sensíveis e já está listado no `.gitignore`. Nunca o commite no repositório.
-
----
-
 ## 🧠 Tecnologias Utilizadas
 
 - 🐍 Python
